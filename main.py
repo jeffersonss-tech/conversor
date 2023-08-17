@@ -40,7 +40,8 @@ def convert_pdf_to_docx(pdf_path, docx_path):
     cv.close()
 
 if __name__ == "__main__":
+    port = int(os.getenv('PORT'), "5000")
     if not os.path.exists(UPLOAD_FOLDER):
         os.makedirs(UPLOAD_FOLDER)
     
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=port)

@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Upload de PDF e Conversão</title>
+    <style>
+        body {
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input[type=file] {
+            background-color: #444;
+            border: none;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        input[type=submit] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #status {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Upload de PDF e Conversão</h1>
+    <form method=post enctype=multipart/form-data>
+        <label for="pdf_file">Selecione um arquivo PDF:</label>
+        <input type=file name=pdf_file>
+        <input type=submit value=Upload e Converter>
+        <input type=reset value=Limpar>
+    </form>
+    <p id="status"></p>
+    <script>
+        var form = document.querySelector("form");
+
+        form.addEventListener("submit", function () {
+            document.getElementById("status").innerHTML = "Processando...";
+
+            // Converte o PDF para DOCX.
+            var pdf_file = document.querySelector("input[name=pdf_file]");
+            var pdf_path = pdf_file.files[0].path;
+            var docx_path = pdf_path.replace(".pdf", ".docx");
+
+            var converter = new pdf2docx.Converter(pdf_path, docx_path);
+            converter.convert(function (err, result) {
+                if (err) {
+                    document.getElementById("status").innerHTML = "Erro: " + err;
+                } else {
+                    document.getElementById("status").innerHTML = "Concluído!";
+                    var downloadButton = document.createElement("button");
+                    downloadButton.textContent = "Fazer download";
+                    downloadButton.addEventListener("click", function () {
+                        window.open(docx_path);
+                    });
+                    document.getElementById("status").appendChild(downloadButton);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
